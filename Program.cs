@@ -21,7 +21,7 @@ namespace MyDiscordBot
 
 	public class DiscordBotConfig
 	{
-		public string Token { get; set; }
+		public string DiscordToken { get; set; }
 		public string SelectedGraphUsername { get; set; }
 		public string SelectedGraph { get; set; }
 		public string AccountKey { get; set; }
@@ -39,7 +39,7 @@ namespace MyDiscordBot
 			Config = LoadConfig();
 
 			DiscordConfiguration dConfig = new DiscordConfiguration {
-				Token = Config.Token,
+				Token = Config.DiscordToken,
 				TokenType = TokenType.Bot,
 				Intents = DiscordIntents.AllUnprivileged |
 					DiscordIntents.GuildMessages |
