@@ -7,6 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System.Text;
 using DSharpPlus.Entities;
+using System.Runtime.ExceptionServices;
+using System.Text.Json.Serialization;
 
 namespace MyDiscordBot
 {
@@ -56,8 +58,14 @@ namespace MyDiscordBot
 			CommandsNextExtension commands = discord.UseCommandsNext(commandsConfig);
 			discord.MessageCreated += OnMessageCreated;
 			commands.RegisterCommands<Commands>();
+
+			if (Config.graphObj == null) {
+				await SetGraphAsync(Config.SelectedGraphUsername, Config.SelectedGraph);
+				Console.Out.WriteLine("successfully set graph to " + Config.graphObj.Name);
+			}
 			await discord.ConnectAsync();
 			await Task.Delay(-1);
+
 		}
 
 		static DiscordBotConfig LoadConfig () {
@@ -66,17 +74,19 @@ namespace MyDiscordBot
 		}
 
 
-	public async static Task SetGraphAsync (CommandContext ctx, string username, string graphName) {
-			List<GraphNodeData> availableGraphs = await GetAvailableGraphsAsync(ctx, username);
+	public async static Task SetGraphAsync (string username, string graphName) {
+			List<GraphNodeData> availableGraphs = await GetAvailableGraphsAsync(username);
 			int index = availableGraphs.FindIndex((g) => graphName == g.Name);
 
 			if (index >= 0) {
 				Config.graphObj = availableGraphs[index];
 				Config.SelectedGraphUsername = username;
-				await ctx.RespondAsync($"Graph '{graphName}' has been set.");
 			}
 			else {
-				await ctx.RespondAsync($"Graph '{graphName}' not found under user {username}. Please select a valid graph.");
+                Console.Out.WriteLine("could not find graph with name: " + graphName + ". availible graphs in user: " + username);
+                foreach(GraphNodeData graph in availableGraphs) {
+                    Console.Out.WriteLine(graph.Name);
+                }
 			}
 		}
 		private static async Task OnMessageCreated(DiscordClient sender, MessageCreateEventArgs e)
@@ -110,8 +120,12 @@ namespace MyDiscordBot
 
         static async Task RespondToMessageAsync(ulong channelId, string message, MessageCreateEventArgs e)
         {
+            if(Config.graphObj == null) {
+                await SetGraphAsync(Config.SelectedGraphUsername, Config.SelectedGraph);
+            }
             ChannelData data = channelData[channelId];
             GraphNodeData model = Config.graphObj;
+
 
             using var httpClient = new HttpClient();
             var request = new RunGraphRequest
@@ -232,7 +246,7 @@ namespace MyDiscordBot
         }
 
 
-		private static async Task<List<GraphNodeData>> GetAvailableGraphsAsync (CommandContext ctx, string username = null) {
+		private static async Task<List<GraphNodeData>> GetAvailableGraphsAsync (string username = null) {
 
 			using var httpClient = new HttpClient();
 
@@ -248,6 +262,8 @@ namespace MyDiscordBot
 			response.EnsureSuccessStatusCode();
 
 			string jsonResponse = await response.Content.ReadAsStringAsync();
+            Console.Out.WriteLine("availible grpahs: ");
+            Console.Out.WriteLine(jsonResponse);
 			var graphsInfoList = JsonConvert.DeserializeObject<List<GraphNodeData>>(jsonResponse);
 
 			return graphsInfoList;
