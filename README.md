@@ -2,8 +2,39 @@
 
 Welcome to OpenHypernodesBot, a Discord bot that uses the power of Hyperthetical to enable deep integration of graphs into your Discord server.
 
-## How to set up OpenHypernodesBot
-To get OpenHypernodesBot running, you will need to follow these steps:
+   ## How to run the bot
+   To get OpenHypernodesBot running, you will need to follow these steps:
+   1. **Download [Prebuilt.zip](https://github.com/fahyc/OSHypernodesBot/blob/main/Prebuilt.zip)**
+
+   2. **Provide the configuration**
+
+   The bot uses a `config.json` file for configuration. An example file should look like this:
+
+   ```json
+   {
+      "DiscordToken": "YourTokenHere",
+      "SelectedGraphUsername": "YourSelectedGraphUsername",
+      "SelectedGraph": "YourSelectedGraphName",
+      "AccountKey": "YourAccountKey"
+   }
+   ```
+
+   Replace the placeholders with your actual information:
+
+   - `YourTokenHere`: The token for your Discord Bot. You can get this from the Discord Developer Portal.
+   - `YourSelectedGraphUsername`: The username associated with the graph on Hyperthetical.
+   - `YourSelectedGraphName`: The name of the graph on Hyperthetical you wish to use.
+   - `YourAccountKey`: Your Hyperthetical account key.
+
+   Make sure the `config.json` file is placed in the root directory of the project.
+
+   3. **Run the bot**
+      
+      Run the DiscordBot.exe file on an internet connected device. 
+
+
+## How to set up OpenHypernodesBot for coding
+If you want to modify OpenHypernodesBot - if, for example, you want to add a new client function your graph can call, you will need to follow these steps:
 
 1. **Clone the repository**
 
