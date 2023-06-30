@@ -3,12 +3,9 @@ using DSharpPlus.CommandsNext;
 using DSharpPlus.Interactivity;
 using DSharpPlus.Interactivity.Extensions;
 using DSharpPlus.EventArgs;
-using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System.Text;
 using DSharpPlus.Entities;
-using System.Runtime.ExceptionServices;
-using System.Text.Json.Serialization;
 
 namespace MyDiscordBot
 {
