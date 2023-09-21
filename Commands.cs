@@ -12,30 +12,29 @@ namespace MyDiscordBot
     {
 
 
-        [Command("setdatakey")]
-        public async Task SetDataKeyAsync(CommandContext ctx, string dataKey)
-        {
-            ulong id = ctx.Channel.Id;
-            CheckChannelData(id);
-            Program.channelData[ctx.Channel.Id].ConversationKey = dataKey;
-            Console.Out.WriteLine("In commmand DataKey");
-            await ctx.RespondAsync($"Data key is now '{dataKey}.'");
-        }
+		[Command("setdatakey")]
+		public async Task SetDataKeyAsync (CommandContext ctx, string dataKey) {
+			ulong id = ctx.Channel.Id;
+			CheckChannelData(id);
+			Program.channelData[ctx.Channel.Id].SetDataKey(dataKey);
+			Console.Out.WriteLine("In commmand DataKey");
+			await ctx.RespondAsync($"Data key is now '{dataKey}.'");
+		}
 
-        [Command("getdatakey")]
-        public async Task GetDataKeyAsync(CommandContext ctx)
-        {
-            ulong id = ctx.Channel.Id;
-            CheckChannelData(id);
-            Console.Out.WriteLine("In commmand getDataKey");
-            await ctx.RespondAsync($"Graph data key is  '{Program.channelData[ctx.Channel.Id].ConversationKey}.'");
-        }
 
-        [Command("forget")]
+		[Command("getkey")]
+		public async Task GetKeyAsync (CommandContext ctx) {
+			ulong id = ctx.Channel.Id;
+			await CheckChannelData(id);
+			Console.Out.WriteLine("In commmand getKey");
+			await ctx.RespondAsync($"Graph data key is  '{Program.channelData[ctx.Channel.Id].fundingKey}.'");
+		}
+
+		[Command("forget")]
         public async Task ForgetAsync(CommandContext ctx)
         {
             ulong id = ctx.Channel.Id;
-            CheckChannelData(id);
+            await CheckChannelData(id);
             Console.Out.WriteLine("In commmand forget");
             int messages = Program.channelData[id].Conversation.Count;
             Program.channelData[id].Conversation = new List<string>();
@@ -47,7 +46,7 @@ namespace MyDiscordBot
         public async Task WakeAsync(CommandContext ctx)
         {
             ulong id = ctx.Channel.Id;
-            CheckChannelData(id);
+            await CheckChannelData(id);
             Console.Out.WriteLine("In command wake");
             if (Program.channelData[ctx.Channel.Id].IsAsleep)
             {
@@ -64,7 +63,7 @@ namespace MyDiscordBot
         public async Task SleepAsync(CommandContext ctx)
         {
             ulong id = ctx.Channel.Id;
-            CheckChannelData(id);
+            await CheckChannelData(id);
             Console.Out.WriteLine("In command sleep");
             if (!Program.channelData[ctx.Channel.Id].IsAsleep)
             {
@@ -78,12 +77,13 @@ namespace MyDiscordBot
         }
 
 
-        static void CheckChannelData(ulong id)
+        static async Task CheckChannelData(ulong id)
         {
             if (!Program.channelData.ContainsKey(id))
             {
-                Program.channelData[id] = new ChannelData();
-            }
+                Program.channelData[id] = new ChannelData(Program.hypernodes);
+                await Program.channelData[id].SetGraphAsync(Program.Config.SelectedGraph, Program.Config.SelectedGraphUsername);
+			}
         }
     }
 }
