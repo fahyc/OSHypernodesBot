@@ -1,7 +1,7 @@
 # OpenHypernodesBot - A Hyperthetical Powered Discord Bot
 
 Welcome to OpenHypernodesBot, a Discord bot that uses the power of Hyperthetical to enable deep integration of graphs into your Discord server.
-
+**[Link to the site](https://www.hyperthetical.dev/)**
    ## How to run the bot
    To get OpenHypernodesBot running, you will need to follow these steps:
    1. **Download [Prebuilt.zip](https://github.com/fahyc/OSHypernodesBot/blob/main/Prebuilt.zip)**
