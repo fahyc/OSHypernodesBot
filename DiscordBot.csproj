@@ -8,10 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DSharpPlus" Version="4.3.0" />
-    <PackageReference Include="DSharpPlus.CommandsNext" Version="4.3.0" />
-    <PackageReference Include="DSharpPlus.Interactivity" Version="4.3.0" />
-    <PackageReference Include="HypernodesClient" Version="1.0.0" />
+    <PackageReference Include="DSharpPlus" Version="4.4.2" />
+    <PackageReference Include="DSharpPlus.CommandsNext" Version="4.4.2" />
+    <PackageReference Include="DSharpPlus.Interactivity" Version="4.4.2" />
+    <PackageReference Include="HypernodesClient" Version="1.0.1" />
   </ItemGroup>
 		<ItemGroup>
     <DotNetCliToolReference Include="DotnetPublishSsh" Version="0.1.0" />
