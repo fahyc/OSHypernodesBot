@@ -6,6 +6,7 @@ using DSharpPlus.EventArgs;
 using Newtonsoft.Json;
 using System.Text;
 using DSharpPlus.Entities;
+using System.Threading.Channels;
 
 namespace MyDiscordBot
 {
@@ -82,6 +83,15 @@ namespace MyDiscordBot
 			return JsonConvert.DeserializeObject<DiscordBotConfig>(configString);
 		}
 
+		public static async Task SetGraph (ulong key) {
+			await channelData[key].SetGraphAsync(Config.SelectedGraph, Config.SelectedGraphUsername);
+			List<Hyperthetical.GraphNodeData> graphs = await hypernodes.GetAvailableGraphsAsync(Config.AccountKey, Config.SelectedGraphUsername);
+			Hyperthetical.GraphNodeData? graph = graphs.Find((item) => { return item.Name == Config.SelectedGraph; });
+			if (graph != null && channelData[key].eventArgs != null) {
+				await channelData[key].eventArgs.Message.RespondAsync(graph.Description);
+			}
+		}
+
 		private static async Task OnMessageCreated (DiscordClient sender, MessageCreateEventArgs e) {
 			Console.Out.WriteLine("Message recieved + " + e.Message);
 			if (e.Author.IsBot || e.Message.Content.StartsWith('!'))
@@ -89,7 +99,9 @@ namespace MyDiscordBot
 
 			if (!channelData.ContainsKey(e.Channel.Id)) {
 				channelData[e.Channel.Id] = new ChannelData(hypernodes);
-				await channelData[e.Channel.Id].SetGraphAsync(Config.SelectedGraph, Config.SelectedGraphUsername);
+				channelData[e.Channel.Id].eventArgs = e;
+				await SetGraph(e.Channel.Id);
+				return;
 			}
 			if (!channelData[e.Channel.Id].IsAsleep) {
 				var channel = channelData[e.Channel.Id];

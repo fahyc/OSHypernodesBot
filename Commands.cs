@@ -1,7 +1,3 @@
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Json;
-using System.Threading.Tasks;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using Newtonsoft.Json;
@@ -82,7 +78,7 @@ namespace MyDiscordBot
             if (!Program.channelData.ContainsKey(id))
             {
                 Program.channelData[id] = new ChannelData(Program.hypernodes);
-                await Program.channelData[id].SetGraphAsync(Program.Config.SelectedGraph, Program.Config.SelectedGraphUsername);
+                await Program.SetGraph(id);
 			}
         }
     }
